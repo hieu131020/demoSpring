@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Products List</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" th:href="@{/css/styles.css}">
+        <script src="https://kit.fontawesome.com/a412d17519.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="left">
+                <div>Products</div>
+                <div>All the available products in our store</div>
+            </div>
+            <div class="right">
+                <a th:href="@{/viewCart}" class="btn-green"><i class="fas fa-shopping-cart"></i>View cart</a>
+            </div>
+        </div>
+        <div class="container">
+            <div sec:authorize="isAuthenticated()">
+                <h2>Welcome</h2> <b><span sec:authentication="name">Username</span></b>
+                &nbsp;
+                <span sec:authentication="principal.authorities">Roles</span>
+            </div>
+
+            <div class="product" th:each="product : ${listProducts}">
+                <form th:action="@{'/add/' + ${currentPage}}" method="get">
+                    <div class="id" th:text="${product.id}">ID</div>
+                    <div class="title" th:text="${product.name}">Name</div>
+                    <img th:src="@{'/product-images/' + ${product.id}+'.png'}" alt="" height="160">
+                    <div class="description" th:text="${product.description}">Description</div>
+                    <div class="price" th:text="${product.price}">Price</div>
+                    <div class="stock" th:text="${product.unit}"></div>
+                    <div>
+                        <a th:href="@{'/detail/' + ${product.id} + '/' + ${currentPage}}" class="btn-details"><i class="fas fa-info-circle"></i>Details</a>
+
+                        <input type="hidden" th:value="${product.id}" name="id"/>
+                        <input type="hidden" th:value="${currentPage}" name="pageNumber"/>
+                        <button type="submit" class="btn-order"><i class="fas fa-shopping-cart"></i>Order Now</button>
+                        <!--<a th:href="@{'/cart/' + ${product.id}}" class="btn-order"><i class="fas fa-shopping-cart"></i>Order Now</a>-->
+                        <!--<button type="submit" class="btn-order"><i class="fas fa-shopping-cart"></i>Order Now</button>-->
+                    </div>
+                </form>
+            </div>
+            <div>
+                Page [[${currentPage}]] of [[${totalPages}]]
+                &nbsp; - &nbsp;
+
+                <a th:if="${currentPage > 1}" th:href="@{/page/1}">First</a>
+                <b><span th:unless="${currentPage > 1}">First</span></b>
+                &nbsp; &nbsp;
+
+                <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}}">Previous</a>
+                <b><span th:unless="${currentPage > 1}">Previous</span></b>
+                &nbsp;
+
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${i != currentPage}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+                    <b><span th:unless="${i != currentPage}">[[${i}]]</span></b>
+                    &nbsp;&nbsp;
+                </span>
+
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
+                <b><span th:unless="${currentPage < totalPages}">Next</span></b>
+                &nbsp; &nbsp;
+
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}}">Last</a>
+                <b><span th:unless="${currentPage < totalPages}">Last</span></b>
+            </div>
+            <!--</tr>-->
+        </div>
+    </body>
+
+</html>

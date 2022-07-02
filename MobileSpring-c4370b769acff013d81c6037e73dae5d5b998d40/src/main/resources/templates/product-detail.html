@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Products Detail</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" th:href="@{/css/styles.css}">
+        <script src="https://kit.fontawesome.com/a412d17519.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="left">
+                <div>Products</div>
+            </div>
+            <div class="right">
+            </div>
+        </div>
+        <div class="container">
+            <div class="left">
+                <img th:src="@{'/product-images/' + ${product.id}+'.png'}" alt="" height="400">
+            </div>
+            <div class="right">
+                <div class="product-detail">
+                    <form th:action="@{/addInDetail}" method="GET">
+                        <div class="title">[[${product.name}]]</div>
+
+                        <div class="description">[[${product.description}]]</div>
+
+                        <div class="text">
+                            <b>Item code</b>: <span id="code">[[${product.id}]]</span>
+                        </div>
+
+                        <div class="text">
+                            <b>Manufacturer</b>: <span>[[${product.manufacturer}]]</span>
+                        </div>
+
+                        <div class="text">
+                            <b>Category</b>: <span><a href="#">[[${product.category}]]</a></span>
+                        </div>
+
+                        <div class="text">
+                            <b>Available units in stock</b>: <span>[[${product.unit}]]</span>
+                        </div>
+
+                        <div id="price" class="text">
+                            <p>[[${product.price}]] USD</p>
+                        </div>
+
+                        <div>
+                            <a th:href="@{'/page/' + ${currentPage}}" class="btn-green"><i class="fas fa-arrow-circle-left"></i>Back</a>
+                            <input type="hidden" th:value="${product.id}" name="id"/>
+                            <button th:type="submit" class="btn-order"><i class="fas fa-shopping-cart"></i>Order Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

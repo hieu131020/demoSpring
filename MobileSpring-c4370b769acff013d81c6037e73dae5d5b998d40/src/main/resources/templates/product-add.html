@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Add Products</title>
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="header">
+            <div class="left">
+                <div>Products</div>
+                <div>Add Products</div>
+            </div>
+            <div class="right">
+                <form th:action="@{/logout}" method="POST">
+                    <button type="submit" class="btn-red">Logout</button>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <div sec:authorize="isAuthenticated()">
+                <h2>Welcome</h2> <b><span sec:authentication="name">Username</span></b>
+                &nbsp;
+                <span sec:authentication="principal.authorities">Roles</span>
+            </div>
+            <h3 th:text="${message}" style="color: green"></h3>
+            <h3 th:text="${messageError}" style="color: red"></h3>
+            <div style="text-align: left;">Add new product</div>
+            <hr>
+            <form class="form-add-product" th:action="@{/product/save}" th:object="${product}" method="POST" enctype="multipart/form-data" style="margin-top: 20px;">
+                <div class="left-panel">
+                    <div>Product Name</div>
+                    <div>Unit price</div>
+                    <div>Units in stock</div>
+                    <div>Description</div>
+                    </br>
+                    <div>Manufacturer</div>
+                    <div>Category</div>
+                    <div>Condition</div>
+                    <div>Product Image File</div>
+                </div>
+
+                <div class="right-panel">
+                    <div><input type="text" th:field="*{name}" name="name" value=""></div>
+                    <div><input type="text" th:field="*{price}" name="price" value=""></div>
+                    <div><input type="number" th:field="*{unit}" value="0" name="unitstock"></div>
+                    <div><textarea rows="2" cols="20" th:field="*{description}" name="description"></textarea></div>
+                    <div><input type="text" th:field="*{manufacturer}" name="manufacturer" value=""></div>
+                    <div><input type="text" th:field="*{category}" name="category" value=""></div>
+                    <div>
+                        <input type="radio" th:field="*{condition}" name="condition" value="New" th:checked="checked"/>New
+                        <input type="radio" th:field="*{condition}" name="condition" value="Old"/>Old
+                        <input type="radio" th:field="*{condition}" name="condition" value="Refurbishes"/>Refurbishes
+                    </div>
+                    <div><input type="file" name="fileImage" accept="image/png" /></div>
+                    <button type="submit">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

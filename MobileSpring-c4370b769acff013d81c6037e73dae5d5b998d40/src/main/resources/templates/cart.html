@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Cart</title>
+        <link type="text/css" rel="stylesheet" th:href="@{/css/styles.css}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/a412d17519.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="left">
+                <div>Cart</div>
+                <div>All the selected products in your cart</div>
+            </div>
+            <div class="right">
+            </div>
+        </div>
+        <div class="container">
+            <h3 th:text="${messageError}" style="color: red"></h3>
+            <h3 th:text="${message}" style="color: green"></h3>
+            <form th:action="@{/clearAll}" method="GET">
+                <div class="left">
+                    <button type="submit" class="btn-red"><i class="fas fa-times-circle"></i>Clear Cart</button>
+                </div>
+            </form>
+
+            <form th:action="@{/checkOut}" method="GET">
+                <div class="right" style="text-align: right;">
+                    <button type="submit" class="btn-green"><i class="fas fa-shopping-cart"></i>Checkout</button>
+                </div>
+            </form>
+
+            <div method="POST">
+                <table class="table">
+                    <thead>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${session.cart.getCart()}">
+                            <td>[[${item.value.name}]]</td>
+                            <td>[[${item.value.unit}]]</td>
+                            <td>[[${item.value.price}]]</td>
+                            <td>[[${item.value.unit * item.value.price}]]</td>
+                            <td><a th:href="@{'/delete/' + ${item.value.id}}" class="btn-small-red" type="submit"><i class="fas fa-times"></i>Remove</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: left;">
+                <form th:action="@{/listAll}" method="GET">
+                    <button type="submit" class="btn-green"><i class="fas fa-arrow-circle-left"></i>Continue shopping</button>
+                </form>
+            </div>
+        </div>
+    </body>
+
+</html>
